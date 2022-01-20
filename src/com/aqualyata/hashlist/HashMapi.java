@@ -63,23 +63,10 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
                 throw new KeyExistException();
             }
         }
-//        if (counter == MAX_COLLISION_COUNT) {
-//            MAX_COLLISION_COUNT *= 2;
-//            Pair<K, V> addElement = new Pair<K, V>(key, value);
-//            arr[newIndex][counter] = addElement;
-////        System.out.println(arr[newIndex][counter].toString());
-////        System.out.println(Arrays.toString(arr[newIndex]));
-//            System.out.println(Arrays.deepToString(arr));
-//            return true;
-//
-//        }
         Pair<K, V> addElement = new Pair<K, V>(key, value);
         arr[newIndex][counter] = addElement;
-//        System.out.println(arr[newIndex][counter].toString());
-//        System.out.println(Arrays.toString(arr[newIndex]));
         System.out.println(Arrays.deepToString(arr));
         return true;
-
     }
 
     @Override
@@ -129,7 +116,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     private Object[][] expand(){
         int nextSize = getNextSize();
         Object[][] expandedArr = new Object[nextSize][MAX_COLLISION_COUNT];
-
+        return null;
     }
 
 }

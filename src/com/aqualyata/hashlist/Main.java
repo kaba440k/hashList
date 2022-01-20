@@ -9,7 +9,8 @@ class Main {
 
         System.out.println(hashListExe.size());
 //        System.out.println(hashListExe.MAX_COLLISION_COUNT);
-//        hashListExe.add("a", 12f);
+        hashListExe.add("a", 12f);
+//        System.out.println();
 //        hashListExe.add("b", 12f);
 //        hashListExe.add("c", 12f);
 //        hashListExe.add("d", 12f);
