@@ -10,20 +10,20 @@ import java.util.Arrays;
 public class HashMapi<K, V> implements SimpleCollection<K, V> {
 
     private static final int DEFAULT_SIZE = 5;
-    private static final int MAX_COLLISION_COUNT = 3;
+    private static final int MAX_COLLISION_COUNT = 10;
 
     @SuppressWarnings("unchecked")
     private Object[][] arr;
 
-    private int currentSize ;
+    private int currentSize;
 
-    public HashMapi(){
+    public HashMapi() {
         this.arr = new Object[DEFAULT_SIZE][MAX_COLLISION_COUNT];
         this.currentSize = DEFAULT_SIZE;
     }
 
     private HashMapi(int size) {
-        this.arr =  new Object[size][MAX_COLLISION_COUNT];
+        this.arr = new Object[size][MAX_COLLISION_COUNT];
         this.currentSize = size;
     }
 
@@ -53,11 +53,33 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
 
     @Override
     public boolean contains(V value) {
+        for (Object[] row : arr) {
+            for (Object column : row) {
+                if (column != null){
+                    if (((Pair<K, V>) column).getValue().equals(value)) {
+                        return true;
+                    }
+                }
+
+            }
+        }
         return false;
     }
 
     @Override
     public boolean containsKey(K key) {
+        int counter = 0;
+        int hash = key.hashCode();
+        int newIndex = newIndex(hash);
+        while (counter != MAX_COLLISION_COUNT) {
+            boolean isKeyFound = arr[newIndex][counter] != null
+                    && ((Pair<K, V>) arr[newIndex][counter]).getKey().hashCode() == hash;
+            if (isKeyFound) {
+                return true;
+            } else {
+                counter += 1;
+            }
+        }
         return false;
     }
 
@@ -73,10 +95,10 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
                 throw new KeyExistException();
             }
         }
-        if (counter == MAX_COLLISION_COUNT){
+        if (counter == MAX_COLLISION_COUNT) {
             expand();
-            newIndex = newIndex(hash);
             counter = 0;
+            newIndex = newIndex(hash);
             while (counter != MAX_COLLISION_COUNT && (Pair<K, V>) arr[newIndex][counter] != null) {
                 if (((Pair<K, V>) arr[newIndex][counter]).getKey() != key) {
                     counter += 1;
@@ -115,6 +137,24 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
 
     @Override
     public boolean removeValue(V value) {
+        boolean check = false;
+        int counterRow=0;
+        for (Object[] row : arr) {
+            int counterColumn =0;
+            for (Object column : row) {
+                if (column != null) {
+                    if (((Pair<K, V>) arr[counterRow][counterColumn]).getValue().equals(value) ) {
+                        arr[counterRow][counterColumn] = null;
+                        check = true;
+                    }
+                counterColumn += 1;
+                }
+            }
+            counterRow+=1;
+        }
+        if (check = true){
+            return true;
+        }
         return false;
     }
 
@@ -128,14 +168,14 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     ///////////////////////////////////////////////////////////////////////////
 
     private int newIndex(int hash) {
-        return hash & currentSize - 1;
+        return hash % (currentSize - 1);
     }
 
-    private int getNextSize(){
-        return currentSize*2;
+    private int getNextSize() {
+        return currentSize * 2;
     }
 
-    private void expand(){
+    private void expand() {
         int nextSize = getNextSize();
         HashMapi<K, V> expandedList = new HashMapi<>(nextSize);
         for (Object[] row : arr) {
@@ -150,7 +190,8 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
         this.arr = expandedList.getObjArr();
         this.currentSize = nextSize;
     }
-    private Object[][] getObjArr(){
+
+    private Object[][] getObjArr() {
         return arr;
     }
 

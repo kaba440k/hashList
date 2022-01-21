@@ -10,15 +10,9 @@ class Main {
         System.out.println(hashListExe.size());
 //        System.out.println(hashListExe.MAX_COLLISION_COUNT);
         hashListExe.add("a", 12f);
-//        System.out.println();
-//        hashListExe.add("b", 12f);
-//        hashListExe.add("c", 12f);
-//        hashListExe.add("d", 12f);
-//        hashListExe.add("e", 12f);
-//        hashListExe.add("f", 12f);
-//        hashListExe.add("g", 12f);
-//        hashListExe.add("h", 12f);
-//        hashListExe.add("n", 12f);
+        hashListExe.add("b", 12f);
+        hashListExe.add("c", 14f);
+        System.out.println(hashListExe.removeValue(12f));
 //        HashMapi<String, Float> hashListExe2 = new HashMapi<>();
 //        System.out.println(hashListExe2.MAX_COLLISION_COUNT);
 //        hashListExe2.MAX_COLLISION_COUNT = 5;
