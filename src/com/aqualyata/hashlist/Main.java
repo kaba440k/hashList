@@ -1,34 +1,22 @@
 package com.aqualyata.hashlist;
 
 
+import com.aqualyata.hashlist.chemestry.CountOfAtoms;
+
+import java.util.HashMap;
+import java.util.Map;
 
 class Main {
 
     public static void main(String[] args) {
         HashMapi<String, Float> hashListExe = new HashMapi<>();
+//        hashListExe.add("a", 12F);
+//        hashListExe.add("a", hashListExe.getValue("a")+5);
+//
+//        System.out.println(hashListExe.getValue("a"));
 
-        System.out.println(hashListExe.size());
-//        System.out.println(hashListExe.MAX_COLLISION_COUNT);
-        hashListExe.add("a", 12f);
-        hashListExe.add("b", 12f);
-        hashListExe.add("c", 14f);
-        System.out.println(hashListExe.removeValue(12f));
-//        HashMapi<String, Float> hashListExe2 = new HashMapi<>();
-//        System.out.println(hashListExe2.MAX_COLLISION_COUNT);
-//        hashListExe2.MAX_COLLISION_COUNT = 5;
-//        System.out.println(hashListExe2.MAX_COLLISION_COUNT);
-//        System.out.println(hashListExe.MAX_COLLISION_COUNT);
-
-
-
-
-
-
-
-
-
-
-        System.out.println(hashListExe.size());
+        CountOfAtoms countOfAtomsExe = new CountOfAtoms();
+        countOfAtomsExe.countAtoms("K4(ON(SH3H5)2)2");
 
     }
 

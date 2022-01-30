@@ -16,4 +16,6 @@ public interface SimpleCollection<K,V> {
     boolean removeValue(V value);
 
     void clear();
+
+    V getValue(K key);
 }

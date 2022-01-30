@@ -55,7 +55,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     public boolean contains(V value) {
         for (Object[] row : arr) {
             for (Object column : row) {
-                if (column != null){
+                if (column != null) {
                     if (((Pair<K, V>) column).getValue().equals(value)) {
                         return true;
                     }
@@ -68,19 +68,26 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        int counter = 0;
         int hash = key.hashCode();
         int newIndex = newIndex(hash);
-        while (counter != MAX_COLLISION_COUNT) {
-            boolean isKeyFound = arr[newIndex][counter] != null
-                    && ((Pair<K, V>) arr[newIndex][counter]).getKey().hashCode() == hash;
-            if (isKeyFound) {
-                return true;
-            } else {
-                counter += 1;
+        for (Object element : arr[newIndex]) {
+            if (element != null) {
+                if (((Pair<K, V>) element).getKey() == key) {
+                    return true;
+                }
             }
         }
         return false;
+//        while (counter != MAX_COLLISION_COUNT) {
+//            boolean isKeyFound = arr[newIndex][counter] != null
+//                    && ((Pair<K, V>) arr[newIndex][counter]).getKey().hashCode() == hash;
+//            if (isKeyFound) {
+//                return true;
+//            } else {
+//                counter += 1;
+//            }
+//        }
+//        return false;
     }
 
     @Override
@@ -92,7 +99,9 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
             if (((Pair<K, V>) arr[newIndex][counter]).getKey() != key) {
                 counter += 1;
             } else {
-                throw new KeyExistException();
+                remove(key);
+                add(key, value);
+                return true;
             }
         }
         if (counter == MAX_COLLISION_COUNT) {
@@ -109,7 +118,6 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
         }
         Pair<K, V> addElement = new Pair<K, V>(key, value);
         arr[newIndex][counter] = addElement;
-        System.out.println(Arrays.deepToString(arr));
         return true;
     }
 
@@ -131,28 +139,27 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
             return false;
         }
         arr[newIndex][counter] = null;
-        System.out.println(Arrays.toString(arr[newIndex]));
         return true;
     }
 
     @Override
     public boolean removeValue(V value) {
         boolean check = false;
-        int counterRow=0;
+        int counterRow = 0;
         for (Object[] row : arr) {
-            int counterColumn =0;
+            int counterColumn = 0;
             for (Object column : row) {
                 if (column != null) {
-                    if (((Pair<K, V>) arr[counterRow][counterColumn]).getValue().equals(value) ) {
+                    if (((Pair<K, V>) arr[counterRow][counterColumn]).getValue().equals(value)) {
                         arr[counterRow][counterColumn] = null;
                         check = true;
                     }
-                counterColumn += 1;
+                    counterColumn += 1;
                 }
             }
-            counterRow+=1;
+            counterRow += 1;
         }
-        if (check = true){
+        if (check = true) {
             return true;
         }
         return false;
@@ -162,6 +169,21 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     public void clear() {
         Arrays.fill(arr, null);
     }
+
+    @Override
+    public V getValue(K key) {
+        int hash = key.hashCode();
+        int newIndex = newIndex(hash);
+        for (Object element : arr[newIndex]) {
+            if (element != null) {
+                if (((Pair<K, V>) element).getKey() == key) {
+                    return ((Pair<K, V>) element).getValue();
+                }
+            }
+        }
+        return null;
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     //                              private
