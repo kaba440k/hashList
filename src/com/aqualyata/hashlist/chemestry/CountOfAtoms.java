@@ -95,7 +95,6 @@ public class CountOfAtoms {
         System.out.println(Arrays.toString(elForAdd));
         addToStack(elForAdd);
         return false;
-
     }
 
     public void addToStack(String[] elForAdd) {
