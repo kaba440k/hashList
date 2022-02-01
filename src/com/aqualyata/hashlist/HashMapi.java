@@ -15,7 +15,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     @SuppressWarnings("unchecked")
     private Object[][] arr;
 
-    private int currentSize;
+    public int currentSize;
 
     public HashMapi() {
         this.arr = new Object[DEFAULT_SIZE][MAX_COLLISION_COUNT];
@@ -189,7 +189,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     //                              private
     ///////////////////////////////////////////////////////////////////////////
 
-    private int newIndex(int hash) {
+    public int newIndex(int hash) {
         return hash % (currentSize - 1);
     }
 
