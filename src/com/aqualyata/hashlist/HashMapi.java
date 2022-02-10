@@ -72,7 +72,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
         int newIndex = newIndex(hash);
         for (Object element : arr[newIndex]) {
             if (element != null) {
-                if (((Pair<K, V>) element).getKey() == key) {
+                if (((Pair<K, V>) element).getKey().equals(key)) {
                     return true;
                 }
             }
@@ -96,7 +96,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
         int hash = key.hashCode();
         int newIndex = newIndex(hash);
         while (counter != MAX_COLLISION_COUNT && (Pair<K, V>) arr[newIndex][counter] != null) {
-            if (((Pair<K, V>) arr[newIndex][counter]).getKey() != key) {
+            if (!((Pair<K, V>) arr[newIndex][counter]).getKey().equals(key)) {
                 counter += 1;
             } else {
                 remove(key);
@@ -159,10 +159,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
             }
             counterRow += 1;
         }
-        if (check = true) {
-            return true;
-        }
-        return false;
+        return check;
     }
 
     @Override
@@ -176,7 +173,7 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
         int newIndex = newIndex(hash);
         for (Object element : arr[newIndex]) {
             if (element != null) {
-                if (((Pair<K, V>) element).getKey() == key) {
+                if (((Pair<K, V>) element).getKey().equals(key)) {
                     return ((Pair<K, V>) element).getValue();
                 }
             }

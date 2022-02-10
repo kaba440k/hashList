@@ -2,131 +2,122 @@ package com.aqualyata.hashlist.chemestry;
 
 import com.aqualyata.hashlist.HashMapi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CountOfAtoms {
-    public HashMapi<String, String> hashListObject = new HashMapi<>();
+    public HashMapi<String, Integer> hashListObject = new HashMapi<>();
 
-    public Object[] countAtoms(String formula) {
-        String[] formulaArray = formula.split("");
-        String[] clearFormula = new String[formulaArray.length];
-        int clearFormulaCounter = 0;
+    // TODO: 03.02.2022 заменить все листы строк в arraylist во всех методах!
+    public String main(String formula){
+
+        typeOfSubstance(countAtoms(formula));
+        return hashListObject.toString();
+    }
+
+
+    public ArrayList<String> countAtoms(String formula) {
         int counter = 0;
-        while (counter + 1 < formulaArray.length) {
-            String element = formulaArray[counter] + formulaArray[counter + 1];
-            boolean currentLetterIsCapital = element.matches("[A-Z]{1}[a-z]{1}");
-            boolean twoDigitNumber = element.matches("\\d{1}\\d{1}");
-
-            if (currentLetterIsCapital || twoDigitNumber) {
-                clearFormula[clearFormulaCounter] = element;
-                counter += 1;
-            } else {
-                clearFormula[clearFormulaCounter] = formulaArray[counter];
-
-            }
-
-            counter += 1;
-            clearFormulaCounter += 1;
-        }
-        clearFormula[clearFormulaCounter] = formulaArray[counter];
-        typeOfSubstance(clearFormula);
-        return null;
-    }
-
-
-    private void typeOfSubstance(String[] clearFormula) {
-        boolean typeOfElement = false;
-        for (String symbol : clearFormula) {
-            if (symbol == null) {
+        ArrayList<String> clearFormulaArr = new ArrayList<>();
+        List<String> formulaArray = Arrays.asList(formula.split(""));
+        while (counter<formulaArray.size()){
+            //todo while->for
+            if(counter+1== formulaArray.size()){
+                clearFormulaArr.add(formulaArray.get(counter));
                 break;
             }
-            if (symbol.equals("(")) {
-                typeOfElement = true;
-                break;
-            }
-        }
-        if (!typeOfElement) {
-            int counter = 1;
-            hashListObject.add("H", "1");
-            while (counter-1!=clearFormula.length) {
-                if (counter== clearFormula.length) {
-                    //todo понять почему на находится контенсКей во всех if
-                    if (hashListObject.containsKey(clearFormula[counter - 1])) {
-                        String currentValue = Integer.toString(Integer.parseInt(hashListObject.getValue(clearFormula[counter - 1])) + 1);
-                        hashListObject.add(clearFormula[counter - 1], currentValue);
-                    } else {
-                        hashListObject.add(clearFormula[counter - 1], "1");
-                    }
-                } else if (clearFormula[counter].matches("\\d+")) {
-                    if (hashListObject.containsKey(clearFormula[counter - 1])) {
-                        String currentValue = Integer.toString(Integer.parseInt(hashListObject.getValue(clearFormula[counter - 1])) + Integer.parseInt(clearFormula[counter]));
-                        hashListObject.add(clearFormula[counter - 1], currentValue);
-                    } else {
-                        hashListObject.add(clearFormula[counter - 1], clearFormula[counter]);
-                        counter++;
-                    }
-                } else {
-                    if (!hashListObject.containsKey(clearFormula[counter - 1])){
-                        String currentValue = Integer.toString(Integer.parseInt(hashListObject.getValue(clearFormula[counter - 1])) + 1);
-                        hashListObject.add(clearFormula[counter - 1], currentValue);
-                    } else {
-                        hashListObject.add(clearFormula[counter-1], "1");
-
-                    }
-                }
+            String element = formulaArray.get(counter) + formulaArray.get(counter + 1);
+            if (element.matches("[A-Z][a-z]|\\d{2,}")) {
+                //todo создать regex в начале файла
+                clearFormulaArr.add(element);
                 counter++;
+            } else {
+                clearFormulaArr.add(formulaArray.get(counter));
             }
+            counter++;
+        }
+       return clearFormulaArr;
+        //todo return clearFormula
+    }
+    //todo с 41 по 61 вынести все в отдельную функцию, а countAtoms сделать мейном
+    
+    private void typeOfSubstance(ArrayList<String> clearFormulaArr) {
+        //todo метод переделать в bool и в зависимости от него в мейн файле нужно вызывать след методы
+        String[] clearFormula = clearFormulaArr.toArray(new String[0]);
+        for (String symbol : clearFormula) {
+            if (symbol.equals("(")) {
+                hooksIsTrue(clearFormula);
+                break;
+            }
+        }
+        int constantFactor = 1;
+        hooksIsFalse(clearFormula, constantFactor);
+    }
+
+    private void hooksIsFalse(String[] clearFormula, int coef) {
+        //todo переименовать методы false и true в parceDifficultFormula и Simple
+        int counter = 1;
+        while (counter - 1 != clearFormula.length && clearFormula[counter - 1] != null) {
+            // TODO: 03.02.2022 переделать в for 
+            if (counter == clearFormula.length) {
+                if (hashListObject.containsKey(clearFormula[counter - 1])) {
+                    Integer currentValue = hashListObject.getValue(clearFormula[counter - 1]) + coef;
+                    hashListObject.add(clearFormula[counter - 1], currentValue);
+                } else {
+                    hashListObject.add(clearFormula[counter - 1], coef);
+                }
+            } else if (clearFormula[counter].matches("\\d+")) {
+                if (hashListObject.containsKey(clearFormula[counter - 1])) {
+                    Integer currentValue = hashListObject.getValue(clearFormula[counter - 1]) + Integer.parseInt(clearFormula[counter]) * coef;
+                    hashListObject.add(clearFormula[counter - 1], currentValue);
+                    counter++;
+                } else {
+                    hashListObject.add(clearFormula[counter - 1], Integer.parseInt(clearFormula[counter]) * coef);
+                    counter++;
+                }
+            } else {
+                if (hashListObject.containsKey(clearFormula[counter - 1])) {
+                    Integer currentValue = hashListObject.getValue(clearFormula[counter - 1]) + coef;
+                    hashListObject.add(clearFormula[counter - 1], currentValue);
+                } else {
+                    hashListObject.add(clearFormula[counter - 1], coef);
+                }
+            }
+            counter++;
         }
     }
 
-    public boolean createElement(String[] clearFormula) {
-        String[] elForAdd = new String[10];
-        int counterForEl = 0;
+
+    private void hooksIsTrue(String[] clearFormula) {
         int counterForAdd = 0;
-        while (!clearFormula[counterForAdd].equals(")")) {
+        int coef = 1;
+        int anyCoef = clearFormula.length - 1;
+        while (counterForAdd<=clearFormula.length-1) {
+            // TODO: 03.02.2022 превратить в for 
+            if (counterForAdd!=0){
+                if (clearFormula[counterForAdd-1].equals(")")){
+                    break;
+                }
+            }
+            ArrayList<String> list = new ArrayList<>();
+            while (!clearFormula[counterForAdd].equals("(")) {
+                if (clearFormula[counterForAdd].equals(")")){
+                    break;
+                }
+                list.add(clearFormula[counterForAdd]);
+                counterForAdd ++;
+            }
+            String[] firstElement = list.toArray(new String[0]);
+            hooksIsFalse(firstElement, coef);
+            if (clearFormula[anyCoef].matches("\\d+")){
+                // TODO: 03.02.2022 обьявить все regex вверху 
+                coef = Integer.parseInt(clearFormula[anyCoef]) * coef;
+                anyCoef-=2;
+            } else {
+                anyCoef-=1;
+            }
             counterForAdd += 1;
         }
-        while (!clearFormula[counterForAdd].equals("(")) {
-            elForAdd[counterForEl] = clearFormula[counterForAdd - 1];
-            counterForAdd -= 1;
-            counterForEl += 1;
-        }
-        elForAdd[counterForEl - 1] = null;
-        System.out.println(Arrays.toString(elForAdd));
-        addToStack(elForAdd);
-        return false;
     }
-
-    public void addToStack(String[] elForAdd) {
-        int counter = 0;
-
-        while (elForAdd[counter] != null) {
-            if (elForAdd[counter].matches("\\p{N}{1,}")) {
-                String value = elForAdd[counter];
-                counter += 1;
-                String key = elForAdd[counter];
-                counter += 1;
-                if (hashListObject.containsKey(key)) {
-                    int newValue = (Integer.parseInt(hashListObject.getValue(key)) + Integer.parseInt(value));
-                    hashListObject.add(key, Integer.toString(newValue));
-                }
-//                } else {
-//                     int newValue = (Integer.parseInt(hashListObject.getValue(key)) + Integer.parseInt(value));
-//                     hashListObject.add(key, Integer.toString(newValue));
-//                }
-            } else {
-                String value = "1";
-                String key = elForAdd[counter];
-                counter += 1;
-                if (!hashListObject.containsKey(key)) {
-                    hashListObject.add(key, value);
-                } else {
-                    int newValue = (Integer.parseInt(hashListObject.getValue(key)) + Integer.parseInt(value));
-                    hashListObject.add(key, Integer.toString(newValue));
-                }
-            }
-        }
-    }
-
-
 }
