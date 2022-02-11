@@ -12,7 +12,7 @@ class Main {
     public static void main(String[] args) {
         HashMapi<String, Float> hashListExe = new HashMapi<>();
         CountOfAtoms countOfAtomsExe = new CountOfAtoms();
-        countOfAtomsExe.addFormula("K4(ON(SO3)2)2HMg3");
+        countOfAtomsExe.addFormula("K4(ON(SO3)2)");
 
     }
 

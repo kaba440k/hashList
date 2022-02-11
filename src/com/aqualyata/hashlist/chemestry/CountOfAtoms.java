@@ -96,23 +96,36 @@ public class CountOfAtoms {
                 step--;
                 if (step == 0) {
                     checkStep = true;
-                    anyCoef = i+1;
+                    if (i + 1 != clearFormula.length) {
+                        anyCoef = i + 1;
+                    } else {
+                        clearFormula = clearFormulaArr.toArray(new String[clearFormulaArr.size() + 1]);
+                        clearFormula[clearFormula.length - 1] = "1";
+                        anyCoef = clearFormula.length - 1;
+                    }
                 }
             }
         }
-        int anyCoefCopy = anyCoef;
+        int lastSymbol = anyCoef;
         // TODO: 03.02.2022 превратить в for +
         for (int counterForAdd = 0; counterForAdd <= clearFormula.length; counterForAdd++) {
             if (counterForAdd != 0) {
                 if (clearFormula[counterForAdd - 1].equals(")")) {
-                    if (anyCoefCopy!=clearFormula.length && clearFormula[anyCoefCopy].matches(numberRegex) ){
+                    if (lastSymbol != clearFormula.length && clearFormula[lastSymbol].matches(numberRegex)) {
                         ArrayList<String> listElement = new ArrayList<>();
-                        for (int i = anyCoefCopy+1; i < clearFormula.length; i++) {
+                        for (int i = lastSymbol + 1; i < clearFormula.length; i++) {
                             listElement.add(clearFormula[i]);
                         }
                         parceSimpleFormula(listElement, 1);
                         break;
-                    }else {
+                    } else if (lastSymbol != clearFormula.length && !clearFormula[lastSymbol].matches(numberRegex)) {
+                        ArrayList<String> listElement = new ArrayList<>();
+                        for (int i = lastSymbol; i < clearFormula.length; i++) {
+                            listElement.add(clearFormula[i]);
+                        }
+                        parceSimpleFormula(listElement, 1);
+                        break;
+                    } else {
                         break;
                     }
                 }
