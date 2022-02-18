@@ -168,6 +168,18 @@ public class HashMapi<K, V> implements SimpleCollection<K, V> {
     }
 
     @Override
+    public String toString(){
+        String clearString = "";
+        for (Object[] row : arr){
+            for (Object column : row){
+                if (column!=null){
+                    clearString+="("+column+")"+" ";
+                }
+            }
+        }
+        return clearString;
+    }
+    @Override
     public V getValue(K key) {
         int hash = key.hashCode();
         int newIndex = newIndex(hash);

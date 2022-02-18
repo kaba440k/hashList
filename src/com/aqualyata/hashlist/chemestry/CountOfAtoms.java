@@ -88,7 +88,7 @@ public class CountOfAtoms {
         int step = 0;
         int anyCoef = 0;
         boolean checkStep = false;
-        for (int i = 0; checkStep != true; i++) {
+        for (int i = 0; !checkStep; i++) {
             if (clearFormula[i].equals("(")) {
                 step++;
             }

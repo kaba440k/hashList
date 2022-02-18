@@ -17,5 +17,7 @@ public interface SimpleCollection<K,V> {
 
     void clear();
 
+    String toString();
+
     V getValue(K key);
 }
